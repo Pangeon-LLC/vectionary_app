@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/vectionary_app/static/css/main.0864e995.css",
+    "main.js": "/vectionary_app/static/js/main.c9af0c8b.js",
+    "static/js/453.f26e4bdb.chunk.js": "/vectionary_app/static/js/453.f26e4bdb.chunk.js",
+    "index.html": "/vectionary_app/index.html",
+    "main.0864e995.css.map": "/vectionary_app/static/css/main.0864e995.css.map",
+    "main.c9af0c8b.js.map": "/vectionary_app/static/js/main.c9af0c8b.js.map",
+    "453.f26e4bdb.chunk.js.map": "/vectionary_app/static/js/453.f26e4bdb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0864e995.css",
+    "static/js/main.c9af0c8b.js"
+  ]
+}
