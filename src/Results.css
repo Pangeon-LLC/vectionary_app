@@ -1,0 +1,28 @@
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 300px; /* Increase width for a larger box */
+  height: 30px;
+  background-color: #555;
+  color: #fff;
+  text-align: left; /* Align text to the left for better readability */
+  border-radius: 8px; /* Optional: increase border radius for a smoother look */
+  padding: 10px; /* Add more padding for space around the text */
+  position: absolute;
+  z-index: 1;
+  bottom: 135%; /* Adjust positioning as needed */
+  left: 50%;
+  margin-left: -150px; /* Center the tooltip relative to its width */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
