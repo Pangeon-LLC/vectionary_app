@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vectionary</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Helvetica', Arial, sans-serif;
+            text-align: center;
+        }
+
+        .App {
+            text-align: center;
+        }
+
+        .App-header {
+            background-color: #ffffff;
+            min-height: 100vh;
+            top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(10px + 2vmin);
+            color: #486Cff;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: -25%;
+        }
+
+        input {
+            padding: 16px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            width: 400px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            background-color: #00008b;
+            transition: background-color 0.1s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #486Cff;
+        }
+
+        .api-info, .p7y-info {
+            position: absolute;
+            bottom: 20px;
+            text-decoration: none;
+        }
+
+        .api-info {
+            left: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            color: #486cff;
+            font-size: calc(2px + 2vmin);
+        }
+
+        .p7y-info {
+            right: 20px;
+            padding: 5px 22px;
+            border-radius: 0;
+            color: #ffffff;
+            background-color: #555555;
+            font-size: calc(6px + 2vmin);
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="App">
+        <header class="App-header">
+            <h1 style="position: absolute; top: 20px; text-align: center; width: 100%;">Vectionary</h1>
+            <p style="position: absolute; top: 100px; text-align: center; font-size: calc(1px + 2vmin); color: black; font-family: Helvetica, Arial, sans-serif;">Project of Parsimony</p>
+
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="inputText"
+                    placeholder="Enter text"
+                />
+                <button id="submitBtn">Submit</button>
+            </div>
+
+            <a 
+                href="https://i.etsystatic.com/40798348/r/il/235c22/4607038596/il_fullxfull.4607038596_dznd.jpg"
+                class="api-info"
+                target="_blank"
+            >
+                Looking for the API?
+            </a>
+
+            <a
+                href="https://www.pangeon.com/parsimony"
+                class="p7y-info"
+                target="_blank"
+            >
+                P7Y
+            </a>
+        </header>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputText = document.getElementById('inputText');
+            const submitBtn = document.getElementById('submitBtn');
+
+            const handleSubmit = () => {
+                const text = inputText.value;
+                // Here you would typically navigate to a results page or perform an action
+                // For this example, I'll just show an alert
+                alert(`You submitted: ${text}`);
+            };
+
+            // Submit on button click
+            submitBtn.addEventListener('click', handleSubmit);
+
+            // Submit on Enter key press
+            inputText.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSubmit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
