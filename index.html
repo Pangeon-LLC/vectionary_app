@@ -121,11 +121,9 @@
             const submitBtn = document.getElementById('submitBtn');
 
             const handleSubmit = () => {
-                const text = inputText.value;
-                // Here you would typically navigate to a results page or perform an action
-                // For this example, I'll just show an alert
-                alert(`You submitted: ${text}`);
-            };
+            const text = inputText.value;
+            window.location.href = `results.html?input=${encodeURIComponent(text)}`;
+        };
 
             // Submit on button click
             submitBtn.addEventListener('click', handleSubmit);
