@@ -1,46 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Results</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Helvetica, Arial, sans-serif';
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #f0f0f0;
-    }
-    h1 {
-      text-align: center;
-    }
-    p {
-      font-size: 18px;
-      text-align: center;
-    }
-    a {
-      margin-top: 20px;
-      color: blue;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vectionary - Results</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Helvetica', Arial, sans-serif;
+            text-align: center;
+        }
+
+        .App-header {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(10px + 2vmin);
+            color: #486Cff;
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 300px;
+            height: 30px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 135%;
+            left: 50%;
+            margin-left: -150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .api-info, .p7y-info {
+            position: absolute;
+            bottom: 20px;
+            text-decoration: none;
+        }
+
+        .api-info {
+            left: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            color: #486cff;
+            font-size: calc(2px + 2vmin);
+        }
+
+        .p7y-info {
+            right: 20px;
+            padding: 5px 22px;
+            border-radius: 0;
+            color: #ffffff;
+            background-color: #555555;
+            font-size: calc(6px + 2vmin);
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+        }
+
+        #results-container {
+            text-align: center;
+            font-size: 18px;
+            color: black;
+            line-height: 1.6;
+            margin-top: 50px;
+        }
+
+        #submitted-text {
+            text-align: center;
+            font-size: 24px;
+            color: black;
+            margin-bottom: 50px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Results</h1>
-  <p id="resultText"></p>
-  <a href="index.html">Back to Home</a>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const inputText = params.get('input');
-    document.getElementById('resultText').textContent = `You entered: ${inputText || 'Nothing was entered'}`;
-  </script>
+    <div class="App">
+        <header class="App-header">
+            <h1 style="position: absolute; top: 20px; text-align: center; width: 100%;">Vectionary</h1>
+            <p style="position: absolute; top: 100px; text-align: center; font-size: calc(1px + 2vmin); color: black; font-family: Helvetica, Arial, sans-serif;">Project of Parsimony</p>
+
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 150px;">
+                <h2 style="margin-bottom: 50px;">Results</h2>
+                <p id="submitted-text">
+                    You submitted: <strong id="input-display"></strong>
+                </p>
+
+                <div id="results-container">
+                    <!-- Results will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <a 
+                href="https://i.etsystatic.com/40798348/r/il/235c22/4607038596/il_fullxfull.4607038596_dznd.jpg"
+                class="api-info"
+                target="_blank"
+            >
+                Looking for the API?
+            </a>
+
+            <a
+                href="https://www.pangeon.com/parsimony"
+                class="p7y-info"
+                target="_blank"
+            >
+                P7Y
+            </a>
+        </header>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Retrieve input text from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const inputText = urlParams.get('input');
+
+            // Display submitted text
+            const inputDisplay = document.getElementById('input-display');
+            const resultsContainer = document.getElementById('results-container');
+
+            if (inputText) {
+                inputDisplay.textContent = inputText;
+
+                // Make API request
+                const url = `http://107.23.181.250:8000/dummy_text/${inputText}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear any existing results
+                        resultsContainer.innerHTML = '';
+
+                        // Process and display results
+                        data.forEach(item => {
+                            const resultElement = document.createElement('p');
+                            resultElement.innerHTML = `
+                                The <span class="tooltip">
+                                    <strong style="color: #486Cff;">${item.text}</strong>
+                                    <span class="tooltip-text">${item.defintion}</span>
+                                </span> was identified as an entity of type <u>${item.type}</u>.
+                                For more details, see this 
+                                <a href="${item.defintion}" target="_blank" style="font-weight: bold; color: #486Cff;">
+                                    link
+                                </a>.
+                            `;
+                            resultsContainer.appendChild(resultElement);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        resultsContainer.innerHTML = '<div>No data available</div>';
+                    });
+            } else {
+                resultsContainer.innerHTML = '<div>No input text provided</div>';
+            }
+        });
+    </script>
 </body>
 </html>
