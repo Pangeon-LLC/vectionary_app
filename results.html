@@ -140,7 +140,7 @@
                 inputDisplay.textContent = inputText;
 
                 // Make API request
-                const url = `http://107.23.181.250:8000/dummy_text/${inputText}`;
+                const url = 'http://107.23.181.250:8000/text/' + inputText;
 
                 fetch(url)
                     .then(response => response.json())
