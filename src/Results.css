@@ -5,24 +5,38 @@
 
 .tooltip .tooltip-text {
   visibility: hidden;
-  width: 300px; /* Increase width for a larger box */
-  height: 30px;
+  width: auto;  /* Allow the width to adjust based on content */
+  max-width: 300px;  /* Optional: limit the max width of the tooltip */
+  padding: 10px; /* Space around the text */
   background-color: #555;
   color: #fff;
-  text-align: left; /* Align text to the left for better readability */
-  border-radius: 8px; /* Optional: increase border radius for a smoother look */
-  padding: 10px; /* Add more padding for space around the text */
+  text-align: left;
+  border-radius: 8px;
   position: absolute;
   z-index: 1;
   bottom: 135%; /* Adjust positioning as needed */
   left: 50%;
-  margin-left: -150px; /* Center the tooltip relative to its width */
+  margin-left: -150px; /* Center the tooltip */
   opacity: 0;
   transition: opacity 0.3s;
+  word-wrap: break-word; /* Ensure long words break correctly to fit in the box */
+  font-size: 18px;
 }
 
 .tooltip:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
+  font-weight: normal;
 }
 
+/* Style for the tooltip span (non-bold by default) */
+.tooltip a {
+  text-decoration: none; /* Removes the underline */
+  color: violet; /* Set the color of nouns to green */
+  font-weight: normal; /* Set font-weight to normal (non-bold) by default */
+}
+
+/* When hovering over the noun (anchor), make it bold */
+.tooltip a:hover {
+  font-weight: bold; /* Bold on hover */
+}
