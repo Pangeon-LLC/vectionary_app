@@ -25,12 +25,12 @@
         .tooltip {
             position: relative;
             cursor: pointer;
+            margin: 0 2px;
         }
 
         .tooltip .tooltip-text {
             visibility: hidden;
             width: 300px;
-            height: 30px;
             background-color: #555;
             color: #fff;
             text-align: left;
@@ -48,31 +48,6 @@
         .tooltip:hover .tooltip-text {
             visibility: visible;
             opacity: 1;
-        }
-
-        .api-info, .p7y-info {
-            position: absolute;
-            bottom: 20px;
-            text-decoration: none;
-        }
-
-        .api-info {
-            left: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            color: #486cff;
-            font-size: calc(2px + 2vmin);
-        }
-
-        .p7y-info {
-            right: 20px;
-            padding: 5px 22px;
-            border-radius: 0;
-            color: #ffffff;
-            background-color: #555555;
-            font-size: calc(6px + 2vmin);
-            font-family: 'Roboto', sans-serif;
-            font-weight: bold;
         }
 
         #results-container {
@@ -102,65 +77,39 @@
                 <p id="submitted-text">
                     You submitted: <strong id="input-display"></strong>
                 </p>
-
-                <div id="results-container">
-                    <!-- Results will be dynamically inserted here -->
-                </div>
+                <div id="results-container"></div>
             </div>
-
-            <a 
-                href="https://i.etsystatic.com/40798348/r/il/235c22/4607038596/il_fullxfull.4607038596_dznd.jpg"
-                class="api-info"
-                target="_blank"
-            >
-                Looking for the API?
-            </a>
-
-            <a
-                href="https://www.pangeon.com/parsimony"
-                class="p7y-info"
-                target="_blank"
-            >
-                P7Y
-            </a>
         </header>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Retrieve input text from URL parameter
             const urlParams = new URLSearchParams(window.location.search);
             const inputText = urlParams.get('input');
-
-            // Display submitted text
             const inputDisplay = document.getElementById('input-display');
             const resultsContainer = document.getElementById('results-container');
 
             if (inputText) {
                 inputDisplay.textContent = inputText;
 
-                // Make API request
-                const url = 'http://107.23.181.250:8000/text/' + inputText;
-
-                fetch(url)
+                fetch('http://107.23.181.250:8000/dummy_text/' + inputText)
                     .then(response => response.json())
                     .then(data => {
-                        // Clear any existing results
                         resultsContainer.innerHTML = '';
-
-                        // Process and display results
-                        data.forEach(item => {
-                            const resultElement = document.createElement('p');
-                            resultElement.innerHTML = `
-                                The <span class="tooltip">
-                                    <strong style="color: #486Cff;">${item.text}</strong>
-                                    <span class="tooltip-text">${item.defintion}</span>
-                                </span> was identified as an entity of type <u>${item.type}</u>.
-                                For more details, see this 
-                                <a href="${item.defintion}" target="_blank" style="font-weight: bold; color: #486Cff;">
-                                    link
-                                </a>.
-                            `;
+                        data.forEach((item, index) => {
+                            const resultElement = document.createElement('span');
+                            resultElement.classList.add('tooltip', item.type.toLowerCase());
+                            
+                            let content = `<span>${item.text}</span>`;
+                            if (item.type === "NOUN" && item.definition !== "TBD") {
+                                content = `<a href="${item.definition}" target="_blank" rel="noopener noreferrer">${item.text}</a>`;
+                            }
+                            
+                            resultElement.innerHTML = `${content}<span class="tooltip-text">
+                                <b>Definition Link:</b> ${item.definition === "TBD" ? item.definition : `<a href="${item.definition}" target="_blank" rel="noopener noreferrer" style="color: white;">${item.definition}</a>`}<br>
+                                <b>Part of Speech:</b> ${item.type}<br>
+                                <b>Index:</b> ${item.index + 1}</span>`;
+                            
                             resultsContainer.appendChild(resultElement);
                         });
                     })
