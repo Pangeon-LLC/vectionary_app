@@ -40,33 +40,61 @@ function Results() {
           justifyContent: 'center',
           marginTop: '150px'
         }}>
-          <h2 style={{ marginBottom: '50px' }}>Results</h2>
+          <h2 style={{ marginBottom: '50px' }}>Results:</h2>
           <p style={{ textAlign: 'center', fontSize: '24px', color: 'black' }}>
             {/* Display the text submitted */}
             You submitted: <strong>{inputText}</strong>
           </p>
 
           {responseData ? (
-          <div style={{ textAlign: 'center', fontSize: '18px', color: 'black', lineHeight: '1.6' }}>
-            {responseData.map((item, index) => (
-              <p key={index}>
-                The <span className="tooltip">
-                <strong style={{ color: '#486Cff' }}>{item.text}</strong>
-                <span className="tooltip-text">{item.defintion}</span>
-                </span> was identified as an entity of type <u>{item.type}</u>.
-                For more details, see this{' '}  
-                <a 
-                  href={item.defintion} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{ fontWeight: 'bold', color: '#486Cff' }}
+            <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
+              {responseData.map((item, index) => (
+                <span
+                  key={index}
+                  className={`tooltip ${item.type.toLowerCase()}`} // Apply class based on type
+                  style={{
+                    margin: "0 2px", // Adds spacing between words
+                  }}
                 >
-                  link
-                </a>.
-              </p>
-            ))}
-          </div>
-        ) : (
+                  {item.type === "NOUN" ? (
+                    <span>
+                      {item.definition === "TBD" ? (
+                        <span>{item.text}</span>  // If definition is "TBD", don't make it a link
+                      ) : (
+                        <a
+                          href={item.definition}  // Link to the definition if it's not "TBD"
+                          target="_blank"          // Open link in a new tab
+                          rel="noopener noreferrer"
+                        >
+                          {item.text}
+                        </a>
+                      )}
+                    </span>
+                  ) : (
+                    <span>{item.text}</span>  // For non-NOUN, VERB, ADJ text, display normally
+                  )}
+
+                  {/* Tooltip for the noun */}
+                  {(item.type === "NOUN") && (
+                    <span className="tooltip-text">
+                      <b>Definition Link:</b> 
+                      {item.definition === "TBD" ? (
+                        <span>{item.definition}</span>
+                      ) : (
+                        <a href={item.definition} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
+                          {item.definition}
+                        </a>
+                      )}
+                      <br />
+                      <b>Part of Speech:</b> {item.type}
+                      <br />
+                      <b>Index:</b> {item.index + 1}
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
+          ) : (
           <div>No data available</div>
 )}
         </div>
