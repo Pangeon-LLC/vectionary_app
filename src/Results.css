@@ -29,14 +29,58 @@
   font-weight: normal;
 }
 
-/* Style for the tooltip span (non-bold by default) */
-.tooltip a {
-  text-decoration: none; /* Removes the underline */
-  color: violet; /* Set the color of nouns to green */
-  font-weight: normal; /* Set font-weight to normal (non-bold) by default */
+/* Nouns - Pink */
+.tooltip.noun {
+  color: hotpink;
 }
 
-/* When hovering over the noun (anchor), make it bold */
-.tooltip a:hover {
-  font-weight: bold; /* Bold on hover */
+.tooltip.noun a {
+  color: hotpink;
+}
+
+.tooltip.noun a:hover {
+  font-weight: bold;
+}
+
+/* Verbs - Blue */
+.tooltip.verb {
+  color: orange;
+}
+
+.tooltip.verb a {
+  color: darkblue;
+}
+
+.tooltip.verb a:hover {
+  font-weight: bold;
+}
+
+/* Adjectives & Adverbs - Green */
+.tooltip.adj,
+.tooltip.adj a,
+.tooltip.adv,
+.tooltip.adv a {
+  color: green !important;
+}
+
+.tooltip.adj a:hover,
+.tooltip.adv a:hover {
+  font-weight: bold;
+}
+
+/* Spinner CSS */
+.spinner {
+  border: 4px solid #f3f3f3; /* Light grey background */
+  border-top: 4px solid #486Cff; /* Blue spinner */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite; /* Spinning animation */
+  margin: auto;
+}
+
+/* Animation for spinning */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
