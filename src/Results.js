@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './Results.css'; // Import the CSS file for styling
+import './Results.css';
 import axios from 'axios';
 
 function Results() {
   const location = useLocation();
   const [responseData, setResponseData] = useState(null);
-  const [error, setError] = useState(null); // State for error handling
-  const inputText = location.state?.inputText; // Access the input text from the passed state
+  const [error, setError] = useState(null);
+  const inputText = location.state?.inputText;
+
+  const SUPPORTED_POS = ['NOUN', 'VERB', 'ADJ', 'ADV'];
 
   useEffect(() => {
     if (inputText) {
       console.log('Making request with:', inputText);
-      const url = `http://107.23.181.250:8000/text/` + inputText; // Safely encode the URL
+      const url = `http://107.23.181.250:8000/text/` + encodeURIComponent(inputText);
 
       axios
         .get(url)
@@ -22,7 +24,7 @@ function Results() {
         })
         .catch(error => {
           console.error('Error:', error);
-          setError('An error occurred while fetching the data.'); // Set error message
+          setError('An error occurred while fetching the data.');
         });
     }
   }, [inputText]);
@@ -68,49 +70,48 @@ function Results() {
 
           {responseData ? (
             <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
-              {responseData.map((item, index) => (
-                <span
-                  key={index}
-                  className={`tooltip ${item.type.toLowerCase()}`}
-                  style={{ margin: '0 2px' }}
-                >
-                  {['NOUN', 'VERB', 'ADJ', 'ADV'].includes(item.type) ? (
-                    <span>
-                      {item.definition === "TBD" ? (
-                        <span>{item.text}</span>
-                      ) : (
+              {responseData.map((item, index) => {
+                const isHighlightedWord = SUPPORTED_POS.includes(item.type);
+                const wiktionaryLink = `https://en.wiktionary.org/wiki/${encodeURIComponent(item.text)}`;
+                
+                return (
+                  <React.Fragment key={index}>
+                    {isHighlightedWord ? (
+                      <span className={`tooltip ${item.type.toLowerCase()}`}>
                         <a
-                          href={item.definition}
+                          href={wiktionaryLink}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className={item.type.toLowerCase()}
                         >
                           {item.text}
                         </a>
-                      )}
-                    </span>
-                  ) : (
-                    <span>{item.text}</span>
-                  )}
-
-                  {/* Tooltip with additional info */}
-                  {['NOUN', 'VERB', 'ADJ', 'ADV'].includes(item.type) && (
-                    <span className="tooltip-text">
-                      <b>Definition Link:</b>{' '}
-                      {item.definition === "TBD" ? (
-                        <span>{item.definition}</span>
-                      ) : (
-                        <a href={item.definition} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
-                          {item.definition}
-                        </a>
-                      )}
-                      <br />
-                      <b>Part of Speech:</b> {item.type}
-                      <br />
-                      <b>Index:</b> {item.index + 1}
-                    </span>
-                  )}
-                </span>
-              ))}
+                        <span className="tooltip-text">
+                          <b>Definition Link:</b>{' '}
+                          {item.definition === "TBD" ? (
+                            <a href={wiktionaryLink} target="_blank" rel="noopener noreferrer">
+                              {wiktionaryLink}
+                            </a>
+                          ) : (
+                            <a href={item.definition} target="_blank" rel="noopener noreferrer">
+                              {item.definition}
+                            </a>
+                          )}
+                          <br />
+                          <b>Part of Speech:</b> {item.type}
+                          <br />
+                          <b>Index:</b> {item.index + 1}
+                        </span>
+                      </span>
+                    ) : (
+                      // Plain text for non-highlighted words
+                      <span>{item.text}</span>
+                    )}
+                    {/* Add space after each word except the last one */}
+                    {index < responseData.length - 1 && <span> </span>}
+                  </React.Fragment>
+                );
+              })}
             </div>
           ) : (
             <div>No data available</div>
