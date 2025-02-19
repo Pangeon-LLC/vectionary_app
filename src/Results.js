@@ -100,7 +100,7 @@ function Results() {
 
           {/* Back Button */}
           <button
-            style={{ marginTop: '20px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer', backgroundColor: '#00008b', color: 'white', fontWeight: 'bold' }}
+            style={{ marginTop: '50px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer', backgroundColor: '#00008b', color: 'white', fontWeight: 'bold' }}
             onClick={() => navigate('/')}
           >
             Go Back
