@@ -98,7 +98,7 @@ function Results() {
         </div>
 
         <a
-          href="https://i.etsystatic.com/40798348/r/il/235c22/4607038596/il_fullxfull.4607038596_dznd.jpg"
+          href="https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/"
           className="api-info"
           target="_blank"
           rel="noopener noreferrer"
