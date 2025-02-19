@@ -1,22 +1,19 @@
-// App.js
 import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Results from './Results';
 
-function App() {
+function Home() {
   const navigate = useNavigate();
-  const [inputText, setInputText] = useState(''); // Step 1: State for storing input text
+  const [inputText, setInputText] = useState('');
 
   const handleSubmit = () => {
-    // Step 2: Navigate to /results with the input text as state
     navigate('/results', { state: { inputText } });
   };
 
-  // Handle key press in the input field
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') { // Check if the pressed key is Enter
-      handleSubmit(); // Call the submit handler
+    if (e.key === 'Enter') {
+      handleSubmit();
     }
   };
 
@@ -26,31 +23,17 @@ function App() {
         <h1 style={{ position: 'absolute', top: '20px', textAlign: 'center', width: '100%' }}>Vectionary</h1>
         <p style={{ position: 'absolute', top: '100px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>Project of Parsimony</p>
 
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          marginTop: '-25%' 
-        }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: '-25%' }}>
           <input 
             type="text" 
             placeholder="Enter text" 
             style={{ padding: '16px', fontSize: '18px', marginBottom: '20px', width: '400px' }}
-            value={inputText} // Step 1: Bind input value to state
-            onChange={(e) => setInputText(e.target.value)} // Step 1: Update state on input change
+            value={inputText} 
+            onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
           />
           <button 
-            style={{ 
-              padding: '10px 20px', 
-              fontSize: '16px', 
-              cursor: 'pointer', 
-              color: 'white', 
-              backgroundColor: '#00008b', 
-              transition: 'background-color 0.1s',
-              fontWeight: 'bold'
-            }}
+            style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', color: 'white', backgroundColor: '#00008b', transition: 'background-color 0.1s', fontWeight: 'bold' }}
             onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#486Cff'}
             onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#00008b'}
             onClick={handleSubmit}
@@ -59,21 +42,10 @@ function App() {
           </button>
         </div>
 
-        <a 
-          href="https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/"
-          className="api-info"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/" className="api-info" target="_blank" rel="noopener noreferrer">
           Looking for the API?
         </a>
-
-        <a
-          href="https://www.pangeon.com/parsimony"
-          className="p7y-info"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://www.pangeon.com/parsimony" className="p7y-info" target="_blank" rel="noopener noreferrer">
           P7Y
         </a>
       </header>
@@ -85,7 +57,7 @@ function AppWrapper() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<Home />} />
         <Route path="/results" element={<Results />} />
       </Routes>
     </Router>
