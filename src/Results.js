@@ -46,12 +46,21 @@ function Results() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: '150px' }}>
           <h2 style={{ marginBottom: '50px' }}>Results:</h2>
 
+          {inputText ? (
+            <p style={{ textAlign: 'center', fontSize: '24px', color: 'black' }}>
+              You inputted: <strong>{inputText}</strong>
+            </p>
+          ) : (
+            <p style={{ textAlign: 'center', fontSize: '24px', color: 'black' }}>
+              No input text provided.
+            </p>
+          )}
+
           {error ? (
             <p style={{ color: 'red' }}>{error}</p>
           ) : (
             responseData ? (
               <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
-                <p><strong>You inputted:</strong> {inputText}</p>
                 {responseData.map((item, index) => {
                   const wiktionaryLink = `https://en.wiktionary.org/wiki/${encodeURIComponent(item.text)}`;
 
