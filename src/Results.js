@@ -36,11 +36,11 @@ function Results() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 style={{ position: 'absolute', top: '20px', textAlign: 'center', width: '100%' }}>
+        <h1 style={{ position: 'absolute', top: '10px', textAlign: 'center', width: '100%' }}>
           Vectionary
         </h1>
         <p style={{ position: 'absolute', top: '100px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>
-          Project of Parsimony
+        The Periodic Table of Meaning
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: '150px' }}>
