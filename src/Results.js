@@ -12,7 +12,6 @@ function Results() {
 
   useEffect(() => {
     if (inputText) {
-      // Making a request with the inputText
       console.log('Making request with:', inputText);
       const url = 'http://107.23.181.250:8000/dummy_text/' + inputText;
 
@@ -42,7 +41,6 @@ function Results() {
         }}>
           <h2 style={{ marginBottom: '50px' }}>Results:</h2>
           <p style={{ textAlign: 'center', fontSize: '24px', color: 'black' }}>
-            {/* Display the text submitted */}
             You submitted: <strong>{inputText}</strong>
           </p>
 
@@ -51,31 +49,22 @@ function Results() {
               {responseData.map((item, index) => (
                 <span
                   key={index}
-                  className={`tooltip ${item.type.toLowerCase()}`} // Apply class based on type
-                  style={{
-                    margin: "0 2px", // Adds spacing between words
-                  }}
+                  className={`tooltip ${item.type.toLowerCase()}`}
+                  style={{ margin: "0 2px" }}
                 >
-                  {item.type === "NOUN" ? (
-                    <span>
-                      {item.definition === "TBD" ? (
-                        <span>{item.text}</span>  // If definition is "TBD", don't make it a link
-                      ) : (
-                        <a
-                          href={item.definition}  // Link to the definition if it's not "TBD"
-                          target="_blank"          // Open link in a new tab
-                          rel="noopener noreferrer"
-                        >
-                          {item.text}
-                        </a>
-                      )}
-                    </span>
+                  {item.definition === "TBD" ? (
+                    <span>{item.text}</span>
                   ) : (
-                    <span>{item.text}</span>  // For non-NOUN, VERB, ADJ text, display normally
+                    <a
+                      href={item.definition}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.text}
+                    </a>
                   )}
 
-                  {/* Tooltip for the noun */}
-                  {(item.type === "NOUN") && (
+                  {(item.type === "NOUN" || item.type === "VERB" || item.type === "ADJ" || item.type === "ADV") && (
                     <span className="tooltip-text">
                       <b>Definition Link:</b> 
                       {item.definition === "TBD" ? (
@@ -98,7 +87,6 @@ function Results() {
             <div>No data available</div>
           )}
 
-          {/* Back Button */}
           <button
             style={{ marginTop: '50px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer', backgroundColor: '#00008b', color: 'white', fontWeight: 'bold' }}
             onClick={() => navigate('/')}
