@@ -31,7 +31,7 @@ function Results() {
           'our', 'their', 'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
           'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'us', 'them',
           'if', 'then', 'else', 'when', 'who', 'what', 'where', 'why', 'how',
-          'as', 'so', 'than', 'such'
+          'as', 'so', 'than', 'such', 'because'
         ];
         
         // Start with type as undefined (no special styling)
@@ -47,7 +47,7 @@ function Results() {
                   'take', 'takes', 'took', 'get', 'gets', 'got', 'make', 'makes',
                   'made', 'say', 'says', 'said', 'find', 'finds', 'found', 'give',
                   'gives', 'gave', 'know', 'knows', 'knew', 'think', 'thinks', 
-                  'thought', 'come', 'comes', 'came', 'work', 'works', 'worked'].includes(cleanWord)) {
+                  'thought', 'come', 'comes', 'came', 'work', 'works', 'worked', 'watch'].includes(cleanWord)) {
           type = 'VERB';
         } 
         // Common adjectives list
@@ -73,7 +73,7 @@ function Results() {
         // Check for proper nouns - words that start with capital letters (not at the beginning of a sentence)
         else if ((index !== 0 && /^[A-Z]/.test(originalWord)) || 
                 (index === 0 && /^[A-Z]/.test(originalWord) && 
-                ['Central', 'Park', 'John', 'Mary', 'London', 'America', 'Paris', 
+                ['Joe', 'Maya', 'Jaden', 'Alicia', 'Anna', 'Central', 'Park',
                  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 
                  'Sunday', 'January', 'February', 'March', 'April', 'May', 'June', 
                  'July', 'August', 'September', 'October', 'November', 'December',
@@ -94,8 +94,9 @@ function Results() {
         }
         
         // Create a Wiktionary link for each word
-        const urlWord = word.replace(/[.,!?;:]/g, '').toLowerCase();
-        const wiktionaryLink = `https://en.wiktionary.org/wiki/${urlWord}`;
+        const cleanWordForUrl = originalWord.replace(/[.,!?;:]/g, ''); // Clean punctuation for URL
+        const wiktionaryLink = `https://en.wiktionary.org/wiki/${cleanWordForUrl}`;
+
         
         return {
           text: word, // Keep original word with punctuation
