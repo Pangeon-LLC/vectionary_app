@@ -22,33 +22,32 @@ function Results() {
         const cleanWord = word.replace(/[.,!?;:]/g, '').toLowerCase();
         const originalWord = word; // Keep the original word with correct casing
         
-        // Simple logic to assign part of speech - focusing on the 5 requested categories
-        let type = 'NOUN'; // Default to noun
+        // Function words list (articles, prepositions, conjunctions, etc.)
+        const functionWords = [
+          'the', 'a', 'an', 'and', 'or', 'but', 'of', 'to', 'in', 'on', 'at', 
+          'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 
+          'during', 'before', 'after', 'above', 'below', 'from', 'up', 'down', 
+          'that', 'this', 'these', 'those', 'my', 'your', 'his', 'her', 'its', 
+          'our', 'their', 'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
+          'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'us', 'them',
+          'if', 'then', 'else', 'when', 'who', 'what', 'where', 'why', 'how',
+          'as', 'so', 'than', 'such'
+        ];
         
-        // Check for proper nouns - words that start with capital letters (not at the beginning of a sentence)
-        const isFirstWord = index === 0;
-        const startsWithCapital = /^[A-Z]/.test(originalWord);
+        // Start with type as undefined (no special styling)
+        let type = undefined;
         
-        if (startsWithCapital && !isFirstWord) {
-          type = 'PROPER NOUN';
-        }
-        // Special case for first word - if it's a known proper noun
-        else if (isFirstWord && startsWithCapital && 
-                ['Central', 'Park', 'John', 'Mary', 'London', 'America', 'Paris', 
-                 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 
-                 'Sunday', 'January', 'February', 'March', 'April', 'May', 'June', 
-                 'July', 'August', 'September', 'October', 'November', 'December',
-                 'Netflix', 'Hulu', 'Amazon', 'Google', 'Apple', 'Microsoft', 
-                 'Facebook', 'Twitter', 'Instagram'].includes(originalWord)) {
-          type = 'PROPER NOUN';
+        // Skip function words - leave type as undefined
+        if (functionWords.includes(cleanWord)) {
+          // Do nothing, type remains undefined
         }
         // Common verbs list
-        else if (['was', 'were', 'be', 'being', 'been', 'have', 
-                  'has', 'had', 'do', 'does', 'did', 'go', 'goes', 'went', 'run', 
+        else if (['have', 'has', 'had', 'do', 'does', 'did', 'go', 'goes', 'went', 'run', 
                   'runs', 'ran', 'see', 'sees', 'saw', 'walk', 'walks', 'walked',
                   'take', 'takes', 'took', 'get', 'gets', 'got', 'make', 'makes',
                   'made', 'say', 'says', 'said', 'find', 'finds', 'found', 'give',
-                  'gives', 'gave'].includes(cleanWord)) {
+                  'gives', 'gave', 'know', 'knows', 'knew', 'think', 'thinks', 
+                  'thought', 'come', 'comes', 'came', 'work', 'works', 'worked'].includes(cleanWord)) {
           type = 'VERB';
         } 
         // Common adjectives list
@@ -57,7 +56,8 @@ function Results() {
                   'old', 'new', 'young', 'high', 'low', 'rich', 'poor', 'easy', 'hard',
                   'early', 'late', 'fast', 'slow', 'hot', 'cold', 'warm', 'cool',
                   'bright', 'dark', 'clean', 'dirty', 'sweet', 'bitter', 'soft', 'hard',
-                  'central', 'quick', 'quickly', 'his'].includes(cleanWord)) {
+                  'central', 'quick', 'nice', 'great', 'best', 'worst', 'important',
+                  'different', 'same', 'other', 'next', 'last', 'long', 'little'].includes(cleanWord)) {
           type = 'ADJECTIVE';
         } 
         // Common adverbs list
@@ -65,8 +65,25 @@ function Results() {
                   'really', 'almost', 'nearly', 'too', 'enough', 'just', 'only',
                   'even', 'still', 'already', 'soon', 'now', 'then', 'here', 'there',
                   'always', 'never', 'often', 'sometimes', 'usually', 'rarely',
-                  'seldom', 'again', 'once', 'twice', 'across'].includes(cleanWord)) {
+                  'seldom', 'again', 'once', 'twice', 'across', 'perhaps', 'maybe',
+                  'definitely', 'certainly', 'probably', 'actually', 'generally',
+                  'finally', 'eventually', 'suddenly', 'recently', 'truly'].includes(cleanWord)) {
           type = 'ADVERB';
+        }
+        // Check for proper nouns - words that start with capital letters (not at the beginning of a sentence)
+        else if ((index !== 0 && /^[A-Z]/.test(originalWord)) || 
+                (index === 0 && /^[A-Z]/.test(originalWord) && 
+                ['Central', 'Park', 'John', 'Mary', 'London', 'America', 'Paris', 
+                 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 
+                 'Sunday', 'January', 'February', 'March', 'April', 'May', 'June', 
+                 'July', 'August', 'September', 'October', 'November', 'December',
+                 'Netflix', 'Hulu', 'Amazon', 'Google', 'Apple', 'Microsoft', 
+                 'Facebook', 'Twitter', 'Instagram'].includes(originalWord.replace(/[.,!?;:]/g, '')))) {
+          type = 'PROPER NOUN';
+        }
+        // Default to NOUN for everything else that's not a function word
+        else {
+          type = 'NOUN';
         }
         
         // Special handling for multi-word proper nouns
@@ -136,40 +153,52 @@ function Results() {
           </p>
           {responseData ? (
             <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
-              {responseData.map((item, index) => (
-                <span
-                  key={index}
-                  className={`tooltip ${item.type.toLowerCase().replace(' ', '-')}`} // Apply class based on type, replace space with dash for CSS
-                  style={{
-                    margin: "0 2px", // Adds spacing between words
-                  }}
-                >
-                  {item.definition !== "TBD" ? (
-                    <a
-                      href={item.definition}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+              {responseData.map((item, index) => {
+                // For words without a type or with undefined type, render them as plain text
+                if (!item.type) {
+                  return (
+                    <span key={index} style={{ margin: "0 2px" }}>
                       {item.text}
-                    </a>
-                  ) : (
-                    <span>{item.text}</span>
-                  )}
-                  {/* Tooltip for the word */}
-                  <span className="tooltip-text">
-                    <b>Definition Link:</b> 
-                    {item.definition === "TBD" ? (
-                      <span>{item.definition}</span>
-                    ) : (
-                      <a href={item.definition} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
-                        {item.definition}
+                    </span>
+                  );
+                }
+                
+                // For words with a type (NOUN, VERB, ADJECTIVE, ADVERB, PROPER NOUN), use the colored tooltip
+                return (
+                  <span
+                    key={index}
+                    className={`tooltip ${item.type.toLowerCase().replace(' ', '-')}`}
+                    style={{
+                      margin: "0 2px", // Adds spacing between words
+                    }}
+                  >
+                    {item.definition !== "TBD" ? (
+                      <a
+                        href={item.definition}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.text}
                       </a>
+                    ) : (
+                      <span>{item.text}</span>
                     )}
-                    <br />
-                    <b>Part of Speech:</b> {item.type}
+                    {/* Tooltip for the word - only show for categorized words */}
+                    <span className="tooltip-text">
+                      <b>Definition Link:</b> 
+                      {item.definition === "TBD" ? (
+                        <span>{item.definition}</span>
+                      ) : (
+                        <a href={item.definition} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
+                          {item.definition}
+                        </a>
+                      )}
+                      <br />
+                      <b>Part of Speech:</b> {item.type}
+                    </span>
                   </span>
-                </span>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div>No data available</div>
