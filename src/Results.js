@@ -67,7 +67,7 @@ function Results() {
                   'always', 'never', 'often', 'sometimes', 'usually', 'rarely',
                   'seldom', 'again', 'once', 'twice', 'across', 'perhaps', 'maybe',
                   'definitely', 'certainly', 'probably', 'actually', 'generally',
-                  'finally', 'eventually', 'suddenly', 'recently', 'truly'].includes(cleanWord)) {
+                  'finally', 'eventually', 'suddenly', 'recently', 'truly', 'through'].includes(cleanWord)) {
           type = 'ADVERB';
         }
         // Check for proper nouns - words that start with capital letters (not at the beginning of a sentence)
