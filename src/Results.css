@@ -55,18 +55,31 @@
   font-weight: bold;
 }
 
-/* Adjectives & Adverbs - Green */
-.tooltip.adj,
-.tooltip.adj a,
-.tooltip.adv,
-.tooltip.adv a {
-  color: green !important;
+/* Adjectives - Green */
+.tooltip.adjective {
+  color: green;
 }
 
-.tooltip.adj a:hover,
-.tooltip.adv a:hover {
+.tooltip.adjective a {
+  color: green;
+}
+
+.tooltip.adjective a:hover {
   font-weight: bold;
 }
+
+/* Adverbs - Green */
+.tooltip.adverb {
+  color: green;
+}
+
+.tooltip.adverb a {
+  color: green;
+}
+
+.tooltip.adverb a:hover {
+  font-weight: bold;
+} 
 
 /* Spinner CSS */
 .spinner {
