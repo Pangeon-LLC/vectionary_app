@@ -81,6 +81,20 @@
   font-weight: bold;
 } 
 
+/* Proper Nouns - Blue */
+.tooltip.proper-noun {
+  color: purple;
+}
+
+.tooltip.proper-noun a {
+  color: purple;
+}
+
+.tooltip.proper-noun a:hover {
+  font-weight: bold;
+}
+
+
 /* Spinner CSS */
 .spinner {
   border: 4px solid #f3f3f3; /* Light grey background */
