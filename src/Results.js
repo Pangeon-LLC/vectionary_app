@@ -47,7 +47,7 @@ function Results() {
                   'take', 'takes', 'took', 'get', 'gets', 'got', 'make', 'makes',
                   'made', 'say', 'says', 'said', 'find', 'finds', 'found', 'give',
                   'gives', 'gave', 'know', 'knows', 'knew', 'think', 'thinks', 
-                  'thought', 'come', 'comes', 'came', 'work', 'works', 'worked', 'watch'].includes(cleanWord)) {
+                  'thought', 'come', 'comes', 'came', 'work', 'works', 'worked', 'watch', 'love'].includes(cleanWord)) {
           type = 'VERB';
         } 
         // Common adjectives list
