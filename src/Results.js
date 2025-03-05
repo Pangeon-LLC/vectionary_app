@@ -120,18 +120,34 @@ function Results() {
       console.log('Mock response:', mockResponse);
       setResponseData(mockResponse);
       
-      // Comment out the actual API call
-      /*
-      const url = 'http://107.23.181.250:8000/dummy_text/' + inputText;
-      axios.get(url)
-        .then(response => {
-          console.log(response.data);
-          setResponseData(response.data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      */
+      const postData = async () => {
+        const url = "https://pjhs2z55t3.execute-api.us-east-1.amazonaws.com/api/process";
+        const data = {
+            text: "Test text",
+            dummy: "1"
+        };
+    
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+    
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+    // Call the function
+    postData();
     }
   }, [inputText]);
 
