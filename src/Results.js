@@ -1,4 +1,3 @@
-// src/Results.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Results.css'; // Import the CSS file for styling
@@ -8,15 +7,24 @@ function Results() {
   const location = useLocation();
   const navigate = useNavigate();
   const [responseData, setResponseData] = useState(null);
-  const inputText = location.state?.inputText; // Access the input text from the passed state
-
-  useEffect(() => {
-    if (inputText) {
+  const [inputText, setInputText] = useState(location.state?.inputText || ''); // Initialize with passed state or empty string
+  
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    processText(inputText);
+  };
+  
+  const processText = (text) => {
+    if (text) {
       // Log that we would normally make a request
-      console.log('Would normally make request with:', inputText);
+      console.log('Would normally make request with:', text);
       
       // Instead of making an API call, create mock data
-      const words = inputText.split(' ');
+      const words = text.split(' ');
       const mockResponse = words.map((word, index) => {
         // Clean the word for analysis (remove punctuation)
         const cleanWord = word.replace(/[.,!?;:]/g, '').toLowerCase();
@@ -145,29 +153,78 @@ function Results() {
         } catch (error) {
             console.error("Error:", error);
         }
-    };
-    // Call the function
-    postData();
+      };
+      // Call the function
+      postData();
     }
-  }, [inputText]);
+  };
+
+  // Process initial text on component mount
+  useEffect(() => {
+    if (location.state?.inputText) {
+      setInputText(location.state.inputText);
+      processText(location.state.inputText);
+    }
+  }, [location.state?.inputText]);
 
   return (
     <div className="App">
       <header className="App-header">
         <h1 style={{ position: 'absolute', top: '20px', textAlign: 'center', width: '100%' }}>Vectionary</h1>
         <p style={{ position: 'absolute', top: '110px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>The Periodic Table of Meaning</p>
+        
+        {/* New Text Input Form */}
+        <div style={{
+          position: 'relative',
+          width: '50%',
+          maxWidth: '700px',
+          margin: '0 auto',
+          marginBottom: '30px'
+        }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%' }}>
+            <input
+              type="text"
+              value={inputText}
+              onChange={handleInputChange}
+              placeholder="Enter a sentence to analyze..."
+              style={{
+                flex: '1',
+                padding: '12px 15px',
+                fontSize: '18px',
+                borderRadius: '4px 0 0 4px',
+                border: '1px solid #ccc',
+                outline: 'none'
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                padding: '12px 20px',
+                fontSize: '18px',
+                backgroundColor: '#00008b',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0 4px 4px 0',
+                cursor: 'pointer',
+                fontWeight: 'bold'
+              }}
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+        
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          marginTop: '150px'
+          width: '90%',
+          maxWidth: '1000px',
+          margin: '0 auto'
         }}>
-          <h2 style={{ marginBottom: '50px' }}>Results:</h2>
-          <p style={{ textAlign: 'center', fontSize: '24px', color: 'black' }}>
-            {/* Display the text submitted */}
-            You submitted: <strong>{inputText}</strong>
-          </p>
+          <h2 style={{ marginBottom: '30px' }}>Results:</h2>
+          
           {responseData ? (
             <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
               {responseData.map((item, index) => {
@@ -218,16 +275,10 @@ function Results() {
               })}
             </div>
           ) : (
-            <div>No data available</div>
+            <div>Enter a sentence above to see the analysis</div>
           )}
-          {/* Back Button */}
-          <button
-            style={{ marginTop: '50px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer', backgroundColor: '#00008b', color: 'white', fontWeight: 'bold' }}
-            onClick={() => navigate('/')}
-          >
-            Go Back
-          </button>
         </div>
+        
         <a
           href="https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/"
           className="api-info"
