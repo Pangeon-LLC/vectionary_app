@@ -179,7 +179,7 @@ function Results() {
           width: '50%',
           maxWidth: '700px',
           margin: '0 auto',
-          marginBottom: '30px'
+          marginBottom: '100px'
         }}>
           <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%' }}>
             <input
