@@ -129,7 +129,7 @@ function Results() {
       setResponseData(mockResponse);
       
       const postData = async () => {
-        const url = "https://pjhs2z55t3.execute-api.us-east-1.amazonaws.com/api/process";
+        const url = "https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/";
         const data = {
             text: "Test text",
             dummy: "1"
