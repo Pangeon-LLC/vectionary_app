@@ -259,7 +259,7 @@ function Results() {
                     )}
                     {/* Tooltip for the word - only show for categorized words */}
                     <span className="tooltip-text">
-                      <b>Definition Link:</b> 
+                      <b>Parsimony Element:</b> 
                       {item.definition === "TBD" ? (
                         <span>{item.definition}</span>
                       ) : (
@@ -268,7 +268,7 @@ function Results() {
                         </a>
                       )}
                       <br />
-                      <b>Part of Speech:</b> {item.type}
+                      <b>Definition:</b> {item.type}
                     </span>
                   </span>
                 );
