@@ -1,6 +1,7 @@
 .tooltip {
   position: relative;
   cursor: pointer;
+  display: inline-block; /* Ensures proper containment */
 }
 
 .tooltip .tooltip-text {
@@ -18,15 +19,32 @@
   left: 50%;
   margin-left: -150px; /* Center the tooltip */
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, visibility 0s 0.3s; /* Add delay to visibility transition */
   word-wrap: break-word; /* Ensure long words break correctly to fit in the box */
   font-size: 18px;
+}
+
+/* Create an invisible area between the word and tooltip */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: 20px; /* Adjust this height as needed to bridge the gap */
+  background: transparent;
 }
 
 .tooltip:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
   font-weight: normal;
+  transition-delay: 0s; /* Remove delay on showing */
+}
+
+/* Make the tooltip persist for a while after leaving the hover state */
+.tooltip:not(:hover) .tooltip-text {
+  transition: opacity 1s, visibility 0s 1s; /* Longer delay before hiding */
 }
 
 /* Nouns - Pink */
