@@ -8,158 +8,50 @@ function Results() {
   const navigate = useNavigate();
   const [responseData, setResponseData] = useState(null);
   const [inputText, setInputText] = useState(location.state?.inputText || ''); // Initialize with passed state or empty string
-  
+  const [loading, setLoading] = useState(false); // For handling loading state
+  const [error, setError] = useState(null); // For error handling
+
   const handleInputChange = (e) => {
     setInputText(e.target.value);
   };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    processText(inputText);
-  };
-  
-  const processText = (text) => {
-    if (text) {
-      // Log that we would normally make a request
-      console.log('Would normally make request with:', text);
-      
-      // Instead of making an API call, create mock data
-      const words = text.split(' ');
-      const mockResponse = words.map((word, index) => {
-        // Clean the word for analysis (remove punctuation)
-        const cleanWord = word.replace(/[.,!?;:]/g, '').toLowerCase();
-        const originalWord = word; // Keep the original word with correct casing
-        
-        // Function words list (articles, prepositions, conjunctions, etc.)
-        const functionWords = [
-          'the', 'a', 'an', 'and', 'or', 'but', 'of', 'to', 'in', 'on', 'at', 
-          'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 
-          'during', 'before', 'after', 'above', 'below', 'from', 'up', 'down', 
-          'that', 'this', 'these', 'those', 'my', 'your', 'his', 'her', 'its', 
-          'our', 'their', 'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
-          'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'us', 'them',
-          'if', 'then', 'else', 'when', 'who', 'what', 'where', 'why', 'how',
-          'as', 'so', 'than', 'such', 'because'
-        ];
-        
-        // Start with type as undefined (no special styling)
-        let type = undefined;
-        
-        // Skip function words - leave type as undefined
-        if (functionWords.includes(cleanWord)) {
-          // Do nothing, type remains undefined
-        }
-        // Common verbs list
-        else if (['have', 'has', 'had', 'do', 'does', 'did', 'go', 'goes', 'went', 'run', 
-                  'runs', 'ran', 'see', 'sees', 'saw', 'walk', 'walks', 'walked',
-                  'take', 'takes', 'took', 'get', 'gets', 'got', 'make', 'makes',
-                  'made', 'say', 'says', 'said', 'find', 'finds', 'found', 'give',
-                  'gives', 'gave', 'know', 'knows', 'knew', 'think', 'thinks', 
-                  'thought', 'come', 'comes', 'came', 'work', 'works', 'worked', 'watch', 'love'].includes(cleanWord)) {
-          type = 'VERB';
-        } 
-        // Common adjectives list
-        else if (['good', 'bad', 'big', 'small', 'happy', 'sad', 'beautiful', 'ugly',
-                  'tall', 'short', 'fat', 'thin', 'red', 'blue', 'green', 'yellow',
-                  'old', 'new', 'young', 'high', 'low', 'rich', 'poor', 'easy', 'hard',
-                  'early', 'late', 'fast', 'slow', 'hot', 'cold', 'warm', 'cool',
-                  'bright', 'dark', 'clean', 'dirty', 'sweet', 'bitter', 'soft', 'hard',
-                  'central', 'quick', 'nice', 'great', 'best', 'worst', 'important',
-                  'different', 'same', 'other', 'next', 'last', 'long', 'little'].includes(cleanWord)) {
-          type = 'ADJECTIVE';
-        } 
-        // Common adverbs list
-        else if (['quickly', 'slowly', 'loudly', 'quietly', 'well', 'badly', 'very',
-                  'really', 'almost', 'nearly', 'too', 'enough', 'just', 'only',
-                  'even', 'still', 'already', 'soon', 'now', 'then', 'here', 'there',
-                  'always', 'never', 'often', 'sometimes', 'usually', 'rarely',
-                  'seldom', 'again', 'once', 'twice', 'across', 'perhaps', 'maybe',
-                  'definitely', 'certainly', 'probably', 'actually', 'generally',
-                  'finally', 'eventually', 'suddenly', 'recently', 'truly', 'through'].includes(cleanWord)) {
-          type = 'ADVERB';
-        }
-        // Check for proper nouns - words that start with capital letters (not at the beginning of a sentence)
-        else if ((index !== 0 && /^[A-Z]/.test(originalWord)) || 
-                (index === 0 && /^[A-Z]/.test(originalWord) && 
-                ['Joe', 'Maya', 'Jaden', 'Alicia', 'Anna', 'Central', 'Park',
-                 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 
-                 'Sunday', 'January', 'February', 'March', 'April', 'May', 'June', 
-                 'July', 'August', 'September', 'October', 'November', 'December',
-                 'Netflix', 'Hulu', 'Amazon', 'Google', 'Apple', 'Microsoft', 
-                 'Facebook', 'Twitter', 'Instagram', 'Gonzaga University'].includes(originalWord.replace(/[.,!?;:]/g, '')))) {
-          type = 'PROPER NOUN';
-        }
-        // Default to NOUN for everything else that's not a function word
-        else {
-          type = 'NOUN';
-        }
-        
-        // Special handling for multi-word proper nouns
-        // If the previous word was "Central" and this word is "Park", mark it as a proper noun
-        if (index > 0 && words[index-1].replace(/[.,!?;:]/g, '') === "Central" && 
-            originalWord.replace(/[.,!?;:]/g, '') === "Park") {
-          type = 'PROPER NOUN';
-        }
-        
-        // Create a Wiktionary link for each word
-        const cleanWordForUrl = originalWord.replace(/[.,!?;:]/g, ''); // Clean punctuation for URL
-        const wiktionaryLink = `https://en.wiktionary.org/wiki/${cleanWordForUrl}`;
 
-        
-        return {
-          text: word, // Keep original word with punctuation
-          type: type,
-          definition: wiktionaryLink
-        };
-      });
-      
-      // Second pass to handle multi-word proper nouns
-      for (let i = 0; i < mockResponse.length; i++) {
-        // If we find "Central" and the next word is "Park", mark both as PROPER NOUN
-        if (i < mockResponse.length - 1 && 
-            mockResponse[i].text.replace(/[.,!?;:]/g, '') === "Central" && 
-            mockResponse[i+1].text.replace(/[.,!?;:]/g, '') === "Park") {
-          mockResponse[i].type = "PROPER NOUN";
-          mockResponse[i+1].type = "PROPER NOUN";
-        }
-      }
-      
-      // Set the mock response data
-      console.log('Mock response:', mockResponse);
-      setResponseData(mockResponse);
-      
-      const postData = async () => {
-        const url = "https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/";
-        const data = {
-            text: "Test text",
-            dummy: "1"
-        };
-    
-        try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-    
-            const result = await response.json();
-            console.log(result);
-        } catch (error) {
-            console.error("Error:", error);
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true); // Set loading to true when submitting
+    setError(null);   // Clear any previous errors
+    await processText(inputText);
+  };
+
+  const processText = async (text) => {
+    if (text) {
+      const url = "https://vectionary-api1.p.rapidapi.com/process";
+      const payload = { text, dummy: "0" };
+      const headers = {
+        "X-RapidAPI-Key": process.env.REACT_APP_RAPIDAPI_KEY, // Make sure the key is in your .env file
+        "X-RapidAPI-Host": "vectionary-api1.p.rapidapi.com",
+        "Content-Type": "application/json"
       };
-      // Call the function
-      postData();
+
+      try {
+        const response = await axios.post(url, payload, { headers });
+
+        // Format API response data
+        const formattedData = response.data.map((item) => ({
+          text: item.text,
+          type: item.type || 'NOUN', // Default to NOUN if no type
+          definition: item.definition_link || 'TBD', // Use definition link if available
+        }));
+
+        setResponseData(formattedData); // Update state with API response
+      } catch (error) {
+        console.error("Error processing text:", error);
+        setError("Failed to fetch data. Please try again later.");
+      } finally {
+        setLoading(false); // Turn off loading when done
+      }
     }
   };
 
-  // Process initial text on component mount
   useEffect(() => {
     if (location.state?.inputText) {
       setInputText(location.state.inputText);
@@ -171,8 +63,10 @@ function Results() {
     <div className="App">
       <header className="App-header">
         <h1 style={{ position: 'absolute', top: '20px', textAlign: 'center', width: '100%' }}>Vectionary</h1>
-        <p style={{ position: 'absolute', top: '110px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>The Periodic Table of Meaning</p>
-        
+        <p style={{ position: 'absolute', top: '110px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>
+          The Periodic Table of Meaning
+        </p>
+
         {/* New Text Input Form */}
         <div style={{
           position: 'relative',
@@ -186,7 +80,6 @@ function Results() {
               type="text"
               value={inputText}
               onChange={handleInputChange}
-              placeholder="Enter a sentence to analyze..."
               style={{
                 flex: '1',
                 padding: '12px 15px',
@@ -213,7 +106,7 @@ function Results() {
             </button>
           </form>
         </div>
-        
+
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -224,26 +117,20 @@ function Results() {
           margin: '0 auto'
         }}>
           <h2 style={{ marginBottom: '30px' }}>Results:</h2>
-          
+
+          {loading && <div>Loading...</div>}
+
+          {error && <div style={{ color: 'red' }}>{error}</div>}
+
           {responseData ? (
             <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
               {responseData.map((item, index) => {
-                // For words without a type or with undefined type, render them as plain text
-                if (!item.type) {
-                  return (
-                    <span key={index} style={{ margin: "0 2px" }}>
-                      {item.text}
-                    </span>
-                  );
-                }
-                
-                // For words with a type (NOUN, VERB, ADJECTIVE, ADVERB, PROPER NOUN), use the colored tooltip
                 return (
                   <span
                     key={index}
                     className={`tooltip ${item.type.toLowerCase().replace(' ', '-')}`}
                     style={{
-                      margin: "0 2px", // Adds spacing between words
+                      margin: "0 2px",
                     }}
                   >
                     {item.definition !== "TBD" ? (
@@ -257,9 +144,10 @@ function Results() {
                     ) : (
                       <span>{item.text}</span>
                     )}
+
                     {/* Tooltip for the word - only show for categorized words */}
                     <span className="tooltip-text">
-                      <b>Parsimony Element:</b> 
+                      <b>Parsimony Element:</b>
                       {item.definition === "TBD" ? (
                         <span>{item.definition}</span>
                       ) : (
@@ -278,7 +166,7 @@ function Results() {
             <div>Enter a sentence above to see the analysis</div>
           )}
         </div>
-        
+
         <a
           href="https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/"
           className="api-info"
