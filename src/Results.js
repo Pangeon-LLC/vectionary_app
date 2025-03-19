@@ -1,63 +1,83 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import './Results.css'; // Import the CSS file for styling
-import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+import './Results.css';
 
 function Results() {
   const location = useLocation();
-  const navigate = useNavigate();
   const [responseData, setResponseData] = useState(null);
-  const [inputText, setInputText] = useState(location.state?.inputText || ''); // Initialize with passed state or empty string
-  const [loading, setLoading] = useState(false); // For handling loading state
-  const [error, setError] = useState(null); // For error handling
-
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [inputText, setInputText] = useState(location.state?.inputText || '');
+  
   const handleInputChange = (e) => {
     setInputText(e.target.value);
+    setError(null);
   };
-
-  const handleSubmit = async (e) => {
+  
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when submitting
-    setError(null);   // Clear any previous errors
-    await processText(inputText);
+    processText(inputText);
   };
 
   const processText = async (text) => {
-    if (text) {
-      const url = "https://vectionary-api1.p.rapidapi.com/process";
-      const payload = { text, dummy: "0" };
-      const headers = {
-        "X-RapidAPI-Key": process.env.REACT_APP_RAPIDAPI_KEY, // Make sure the key is in your .env file
-        "X-RapidAPI-Host": "vectionary-api1.p.rapidapi.com",
-        "Content-Type": "application/json"
-      };
-
-      try {
-        const response = await axios.post(url, payload, { headers });
-
-        // Format API response data
-        const formattedData = response.data.map((item) => ({
-          text: item.text,
-          type: item.type || 'NOUN', // Default to NOUN if no type
-          definition: item.definition_link || 'TBD', // Use definition link if available
-        }));
-
-        setResponseData(formattedData); // Update state with API response
-      } catch (error) {
-        console.error("Error processing text:", error);
-        setError("Failed to fetch data. Please try again later.");
-      } finally {
-        setLoading(false); // Turn off loading when done
+    console.log("Starting API request...");
+  
+    if (!text) {
+      setError('Please enter some text to analyze.');
+      return;
+    }
+  
+    setLoading(true);
+    setError(null);
+  
+    const url = "https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/process";
+    const requestData = { text: text, dummy: 0 };
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      });
+  
+      console.log("API response received:", response);
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+  
+      const result = await response.json();
+      console.log("Processed API result:", result);
+      setResponseData(result);
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setError(`Failed to process text: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (location.state?.inputText) {
-      setInputText(location.state.inputText);
       processText(location.state.inputText);
     }
   }, [location.state?.inputText]);
+
+  const getWordColor = (type) => {
+    const colorMap = {
+      'NOUN': '#ff69b4', // hotpink
+      'VERB': '#ffa500', // orange
+      'ADJ': '#008000', // green
+      'ADV': '#008000', // green
+      'PRON': '#4b0082', // indigo
+      'DET': '#808080', // gray
+      'PRT': '#808080', // gray
+    };
+    return colorMap[type] || '#000000';
+  };
 
   return (
     <div className="App">
@@ -66,23 +86,16 @@ function Results() {
         <p style={{ position: 'absolute', top: '110px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>
           The Periodic Table of Meaning
         </p>
-
-        {/* New Text Input Form */}
-        <div style={{
-          position: 'relative',
-          width: '50%',
-          maxWidth: '700px',
-          margin: '0 auto',
-          marginBottom: '100px'
-        }}>
+        
+        <div style={{ position: 'relative', width: '50%', maxWidth: '700px', margin: '0 auto', marginBottom: '100px' }}>
           <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%' }}>
             <input
               type="text"
               value={inputText}
               onChange={handleInputChange}
+              placeholder="Enter a sentence to analyze..."
               style={{
-                flex: '1',
-                padding: '12px 15px',
+                flex: '1',padding: '12px 15px',
                 fontSize: '18px',
                 borderRadius: '4px 0 0 4px',
                 border: '1px solid #ccc',
@@ -91,82 +104,76 @@ function Results() {
             />
             <button
               type="submit"
+              disabled={loading}
               style={{
                 padding: '12px 20px',
                 fontSize: '18px',
-                backgroundColor: '#00008b',
+                backgroundColor: loading ? '#cccccc' : '#00008b',
                 color: 'white',
                 border: 'none',
                 borderRadius: '0 4px 4px 0',
-                cursor: 'pointer',
+                cursor: loading ? 'not-allowed' : 'pointer',
                 fontWeight: 'bold'
               }}
             >
-              Submit
+              {loading ? 'Processing...' : 'Submit'}
             </button>
           </form>
-        </div>
-
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '90%',
-          maxWidth: '1000px',
-          margin: '0 auto'
-        }}>
-          <h2 style={{ marginBottom: '30px' }}>Results:</h2>
-
-          {loading && <div>Loading...</div>}
-
-          {error && <div style={{ color: 'red' }}>{error}</div>}
-
-          {responseData ? (
-            <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
-              {responseData.map((item, index) => {
-                return (
-                  <span
-                    key={index}
-                    className={`tooltip ${item.type.toLowerCase().replace(' ', '-')}`}
-                    style={{
-                      margin: "0 2px",
-                    }}
-                  >
-                    {item.definition !== "TBD" ? (
-                      <a
-                        href={item.definition}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {item.text}
-                      </a>
-                    ) : (
-                      <span>{item.text}</span>
-                    )}
-
-                    {/* Tooltip for the word - only show for categorized words */}
-                    <span className="tooltip-text">
-                      <b>Parsimony Element:</b>
-                      {item.definition === "TBD" ? (
-                        <span>{item.definition}</span>
-                      ) : (
-                        <a href={item.definition} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
-                          {item.definition}
-                        </a>
-                      )}
-                      <br />
-                      <b>Definition:</b> {item.type}
-                    </span>
-                  </span>
-                );
-              })}
+          
+          {error && (
+            <div style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>
+              {error}
             </div>
-          ) : (
+          )}
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '90%', maxWidth: '1000px', margin: '0 auto' }}>
+          <h2 style={{ marginBottom: '30px' }}>Results:</h2>
+          
+          {loading && (
+            <div className="spinner"></div>
+          )}
+          
+          {!loading && responseData ? (
+            <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
+              {responseData.map((item, index) => (
+                <span
+                  key={index}
+                  className="tooltip"
+                  style={{ 
+                    margin: "0 2px",
+                    color: getWordColor(item.type)
+                  }}
+                >
+                  {item.definition ? (
+                    <a
+                      href={item.definition}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: getWordColor(item.type) }}
+                    >
+                      {item.text}
+                    </a>
+                  ) : (
+                    <span>{item.text}</span>
+                  )}
+                  <span className="tooltip-text">
+                    <b>Type:</b> {item.type}<br />
+                    {item.element_name && (
+                      <><b>Element:</b> {item.element_name}<br /></>
+                    )}
+                    {item.definition_link && (
+                      <><b>Definition:</b> <a href={item.definition_link} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>{item.definition}</a></>
+                    )}
+                  </span>
+                </span>
+              ))}
+            </div>
+          ) : !loading && (
             <div>Enter a sentence above to see the analysis</div>
           )}
         </div>
-
+        
         <a
           href="https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/"
           className="api-info"
