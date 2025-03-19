@@ -31,7 +31,7 @@ function Results() {
     setError(null);
   
     const url = "https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/process";
-    const requestData = { text: text, dummy: 0 };
+    const requestData = { text: text, dummy: "1" };
   
     try {
       const response = await fetch(url, {
