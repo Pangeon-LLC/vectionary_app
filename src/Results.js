@@ -31,7 +31,7 @@ function Results() {
     setError(null);
   
     const url = "https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/process";
-    const requestData = { text: text, dummy: "1" };
+    const requestData = { text: text, dummy: "0" };
   
     try {
       const response = await fetch(url, {
@@ -66,28 +66,20 @@ function Results() {
     }
   }, [location.state?.inputText]);
 
-  const getWordColor = (type) => {
-    const colorMap = {
-      'NOUN': '#ff69b4', // hotpink
-      'VERB': '#ffa500', // orange
-      'ADJ': '#008000', // green
-      'ADV': '#008000', // green
-      'PRON': '#4b0082', // indigo
-      'DET': '#808080', // gray
-      'PRT': '#808080', // gray
-    };
-    return colorMap[type] || '#000000';
-  };
-
   return (
     <div className="App">
       <header className="App-header">
         <h1 style={{ position: 'absolute', top: '20px', textAlign: 'center', width: '100%' }}>Vectionary</h1>
-        <p style={{ position: 'absolute', top: '110px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>
-          The Periodic Table of Meaning
-        </p>
+        <p style={{ position: 'absolute', top: '110px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>The Periodic Table of Meaning</p>
         
-        <div style={{ position: 'relative', width: '50%', maxWidth: '700px', margin: '0 auto', marginBottom: '100px' }}>
+        {/* New Text Input Form */}
+        <div style={{
+          position: 'relative',
+          width: '50%',
+          maxWidth: '700px',
+          margin: '0 auto',
+          marginBottom: '100px'
+        }}>
           <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%' }}>
             <input
               type="text"
@@ -95,7 +87,8 @@ function Results() {
               onChange={handleInputChange}
               placeholder="Enter a sentence to analyze..."
               style={{
-                flex: '1',padding: '12px 15px',
+                flex: '1',
+                padding: '12px 15px',
                 fontSize: '18px',
                 borderRadius: '4px 0 0 4px',
                 border: '1px solid #ccc',
@@ -104,72 +97,97 @@ function Results() {
             />
             <button
               type="submit"
-              disabled={loading}
               style={{
                 padding: '12px 20px',
                 fontSize: '18px',
-                backgroundColor: loading ? '#cccccc' : '#00008b',
+                backgroundColor: '#00008b',
                 color: 'white',
                 border: 'none',
                 borderRadius: '0 4px 4px 0',
                 cursor: loading ? 'not-allowed' : 'pointer',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                opacity: loading ? 0.7 : 1
               }}
+              disabled={loading}
             >
               {loading ? 'Processing...' : 'Submit'}
             </button>
           </form>
-          
-          {error && (
-            <div style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>
-              {error}
-            </div>
-          )}
         </div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '90%', maxWidth: '1000px', margin: '0 auto' }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '90%',
+          maxWidth: '1000px',
+          margin: '0 auto'
+        }}>
           <h2 style={{ marginBottom: '30px' }}>Results:</h2>
           
-          {loading && (
-            <div className="spinner"></div>
-          )}
-          
-          {!loading && responseData ? (
-            <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
-              {responseData.map((item, index) => (
-                <span
-                  key={index}
-                  className="tooltip"
-                  style={{ 
-                    margin: "0 2px",
-                    color: getWordColor(item.type)
-                  }}
-                >
-                  {item.definition ? (
-                    <a
-                      href={item.definition}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: getWordColor(item.type) }}
-                    >
-                      {item.text}
-                    </a>
-                  ) : (
-                    <span>{item.text}</span>
-                  )}
-                  <span className="tooltip-text">
-                    <b>Type:</b> {item.type}<br />
-                    {item.element_name && (
-                      <><b>Element:</b> {item.element_name}<br /></>
-                    )}
-                    {item.definition_link && (
-                      <><b>Definition:</b> <a href={item.definition_link} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>{item.definition}</a></>
-                    )}
-                  </span>
-                </span>
-              ))}
+          {loading ? (
+            <div className="loading-indicator" style={{
+              textAlign: 'center',
+              margin: '20px 0',
+              fontSize: '18px',
+              color: '#555'
+            }}>
+              <div className="spinner"></div>
+              <p style={{ marginTop: '15px' }}>Analyzing your text...</p>
             </div>
-          ) : !loading && (
+          ) : error ? (
+            <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>
+          ) : responseData ? (
+            <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
+              {responseData.map((item, index) => {
+                // For words without a type or with undefined type, render them as plain text
+                if (!item.type) {
+                  return (
+                    <span key={index} style={{ margin: "0 2px" }}>
+                      {item.text}
+                    </span>
+                  );
+                }
+                
+                // For words with a type (NOUN, VERB, ADJECTIVE, ADVERB, PROPER NOUN), use the colored tooltip
+                return (
+                  <span
+                    key={index}
+                    className={`tooltip ${item.type.toLowerCase().replace(' ', '-')}`}
+                    style={{
+                      margin: "0 2px", // Adds spacing between words
+                    }}
+                  >
+                    {item.definition !== "TBD" ? (
+                      <a
+                        href={item.definition}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.text}
+                      </a>
+                    ) : (
+                      <span>{item.text}</span>
+                    )}
+                    {/* Tooltip for the word - only show for categorized words */}
+                    <span className="tooltip-text">
+                      <b>Parsimony Element:</b> 
+                      {item.definition === "TBD" ? (
+                        <span>{item.definition}</span>
+                      ) : (
+                        <a href={item.definition} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
+                          {item.definition}
+                        </a>
+                      )}
+                      <br />
+                      <b>Definition:</b> {item.type}
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
             <div>Enter a sentence above to see the analysis</div>
           )}
         </div>
