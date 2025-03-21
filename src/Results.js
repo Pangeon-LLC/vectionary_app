@@ -172,16 +172,16 @@ function Results() {
                     )}
                     {/* Tooltip for the word - only show for categorized words */}
                     <span className="tooltip-text">
-                      <b>Parsimony Element:</b> 
-                      {item.definition === "TBD" ? (
+                      <b>Parsimony Element:</b>&nbsp;
+                      {item.element_name === "TBD" ? (
                         <span>{item.definition}</span>
                       ) : (
-                        <a href={item.definition} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
-                          {item.definition}
+                        <a href={item.definition_link} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
+                          {item.element_name}
                         </a>
                       )}
                       <br />
-                      <b>Definition:</b> {item.type}
+                      <b>Definition:</b> {item.definition}
                     </span>
                   </span>
                 );
