@@ -74,41 +74,41 @@
 }
 
 /* Adjectives - Green */
-.tooltip.adjective {
+.tooltip.adj {
   color: green;
 }
 
-.tooltip.adjective a {
+.tooltip.adj a {
   color: green;
 }
 
-.tooltip.adjective a:hover {
+.tooltip.adj a:hover {
   font-weight: bold;
 }
 
 /* Adverbs - Green */
-.tooltip.adverb {
+.tooltip.adv {
   color: green;
 }
 
-.tooltip.adverb a {
+.tooltip.adv a {
   color: green;
 }
 
-.tooltip.adverb a:hover {
+.tooltip.adv a:hover {
   font-weight: bold;
 } 
 
 /* Proper Nouns - Blue */
-.tooltip.proper-noun {
+.tooltip.proper {
   color: purple;
 }
 
-.tooltip.proper-noun a {
+.tooltip.proper a {
   color: purple;
 }
 
-.tooltip.proper-noun a:hover {
+.tooltip.proper a:hover {
   font-weight: bold;
 }
 
