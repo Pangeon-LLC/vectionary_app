@@ -14,6 +14,21 @@
   font-weight: bold;
 }
 
+.det .word,
+.prt .word,
+.adp .word {
+  text-decoration: none;
+  border-bottom: none;
+  cursor: default;
+}
+
+.det:hover .word,
+.prt:hover .word,
+.adp:hover .word {
+  font-weight: normal;
+  text-decoration: none;
+}
+
 /* Base word colors */
 .noun .word { color: hotpink; border-color: hotpink; }
 .verb .word { color: orange; border-color: orange; }
