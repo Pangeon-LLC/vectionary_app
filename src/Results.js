@@ -72,7 +72,6 @@ function Results() {
         <h1 style={{ position: 'absolute', top: '20px', textAlign: 'center', width: '100%' }}>Vectionary</h1>
         <p style={{ position: 'absolute', top: '110px', textAlign: 'center', fontSize: 'calc(1px + 2vmin)', color: 'black', fontFamily: 'Helvetica, Arial, sans-serif' }}>The Periodic Table of Meaning</p>
         
-        {/* New Text Input Form */}
         <div style={{
           position: 'relative',
           width: '50%',
@@ -141,7 +140,6 @@ function Results() {
           ) : responseData ? (
             <div style={{ textAlign: 'center', fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
               {responseData.map((item, index) => {
-                // For words without a type or with undefined type, render them as plain text
                 if (!item.type) {
                   return (
                     <span key={index} style={{ margin: "0 2px" }}>
@@ -150,39 +148,30 @@ function Results() {
                   );
                 }
                 
-                // For words with a type (NOUN, VERB, ADJECTIVE, ADVERB, PROPER NOUN), use the colored tooltip
                 return (
                   <span
                     key={index}
-                    className={`tooltip ${item.type.toLowerCase().replace(' ', '-')}`}
-                    style={{
-                      margin: "0 2px", // Adds spacing between words
-                    }}
+                    className={`group ${item.type.toLowerCase().replace(' ', '-')}`}
                   >
-                    {item.definition !== "TBD" ? (
-                      <a
-                        href={item.definition}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                    <span className="word">{item.text}</span>
+                    
+                    <a 
+                      href={item.definition_link || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="periodic-element"
+                    >
+                      <div className="element-arrow"></div>
+                      <div className="element-name">
+                        {item.element_name === "TBD" ? item.definition : item.element_name}
+                      </div>
+                      <div className="element-symbol">
                         {item.text}
-                      </a>
-                    ) : (
-                      <span>{item.text}</span>
-                    )}
-                    {/* Tooltip for the word - only show for categorized words */}
-                    <span className="tooltip-text">
-                      <b>Parsimony Element:</b>&nbsp;
-                      {item.element_name === "TBD" ? (
-                        <span>{item.definition}</span>
-                      ) : (
-                        <a href={item.definition_link} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
-                          {item.element_name}
-                        </a>
-                      )}
-                      <br />
-                      <b>Definition:</b> {item.definition}
-                    </span>
+                      </div>
+                      <div className="element-definition">
+                        {item.definition}
+                      </div>
+                    </a>
                   </span>
                 );
               })}

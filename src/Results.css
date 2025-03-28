@@ -1,130 +1,151 @@
-.tooltip {
+.group {
   position: relative;
-  cursor: pointer;
-  display: inline-block; /* Ensures proper containment */
+  display: inline-block;
+  margin: 0 2px;
 }
 
-.tooltip .tooltip-text {
+.word {
+  cursor: help;
+  border-bottom: 2px dotted;
+  transition: all 0.2s ease;
+}
+
+.group:hover .word {
+  font-weight: bold;
+}
+
+/* Base word colors */
+.noun .word { color: hotpink; border-color: hotpink; }
+.verb .word { color: orange; border-color: orange; }
+.adj .word, .adv .word { color: green; border-color: green; }
+.proper .word { color: purple; border-color: purple; }
+
+/* Periodic element styling */
+.periodic-element {
   visibility: hidden;
-  width: auto;  /* Allow the width to adjust based on content */
-  max-width: 300px;  /* Optional: limit the max width of the tooltip */
-  padding: 10px; /* Space around the text */
-  background-color: #555;
-  color: #fff;
-  text-align: left;
-  border-radius: 8px;
-  position: absolute;
-  z-index: 1;
-  bottom: 135%; /* Adjust positioning as needed */
-  left: 50%;
-  margin-left: -150px; /* Center the tooltip */
   opacity: 0;
-  transition: opacity 0.3s, visibility 0s 0.3s; /* Add delay to visibility transition */
-  word-wrap: break-word; /* Ensure long words break correctly to fit in the box */
-  font-size: 18px;
-}
-
-/* Create an invisible area between the word and tooltip */
-.tooltip::after {
-  content: '';
   position: absolute;
+  left: 50%;
   bottom: 100%;
-  left: 0;
-  width: 100%;
-  height: 20px; /* Adjust this height as needed to bridge the gap */
-  background: transparent;
+  transform: translateX(-50%);
+  width: 280px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  text-decoration: none;
+  cursor: pointer;
+  display: block;
 }
 
-.tooltip:hover .tooltip-text {
+.group:hover .periodic-element {
   visibility: visible;
   opacity: 1;
-  font-weight: normal;
-  transition-delay: 0s; /* Remove delay on showing */
 }
 
-/* Make the tooltip persist for a while after leaving the hover state */
-.tooltip:not(:hover) .tooltip-text {
-  transition: opacity 1s, visibility 0s 1s; /* Longer delay before hiding */
+/* Element arrow */
+.element-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid;
 }
 
-/* Nouns - Pink */
-.tooltip.noun {
-  color: hotpink;
+/* Element name section */
+.element-name {
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+  font-family: monospace;
+  color: white;
 }
 
-.tooltip.noun a {
-  color: hotpink;
-}
-
-.tooltip.noun a:hover {
+/* Element symbol (the word) */
+.element-symbol {
+  padding: 15px 10px;
+  text-align: center;
+  font-size: 32px;
   font-weight: bold;
+  color: white;
 }
 
-/* Verbs - Orange */
-.tooltip.verb {
-  color: orange;
+/* Element definition */
+.element-definition {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+  color: white;
 }
 
-.tooltip.verb a {
-  color: orange;
+/* Color themes for different types */
+.noun .periodic-element {
+  background-color: hotpink;
+}
+.noun .element-name {
+  background-color: #d84d93;
+}
+.noun .element-arrow {
+  border-top-color: #d84d93;
 }
 
-.tooltip.verb a:hover {
-  font-weight: bold;
+.verb .periodic-element {
+  background-color: orange;
+}
+.verb .element-name {
+  background-color: #cc7000;
+}
+.verb .element-arrow {
+  border-top-color: #cc7000;
 }
 
-/* Adjectives - Green */
-.tooltip.adj {
-  color: green;
+.adj .periodic-element,
+.adv .periodic-element {
+  background-color: green;
+}
+.adj .element-name,
+.adv .element-name {
+  background-color: #006400;
+}
+.adj .element-arrow,
+.adv .element-arrow {
+  border-top-color: #006400;
 }
 
-.tooltip.adj a {
-  color: green;
+.proper .periodic-element {
+  background-color: purple;
+}
+.proper .element-name {
+  background-color: #4b0082;
+}
+.proper .element-arrow {
+  border-top-color: #4b0082;
 }
 
-.tooltip.adj a:hover {
-  font-weight: bold;
+/* Hover effect for the entire periodic element */
+.periodic-element:hover {
+  transform: translateX(-50%) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Adverbs - Green */
-.tooltip.adv {
-  color: green;
-}
-
-.tooltip.adv a {
-  color: green;
-}
-
-.tooltip.adv a:hover {
-  font-weight: bold;
-} 
-
-/* Proper Nouns - Blue */
-.tooltip.proper {
-  color: purple;
-}
-
-.tooltip.proper a {
-  color: purple;
-}
-
-.tooltip.proper a:hover {
-  font-weight: bold;
-}
-
-
-/* Spinner CSS */
+/* Spinner */
 .spinner {
-  border: 4px solid #f3f3f3; /* Light grey background */
-  border-top: 4px solid #486Cff; /* Blue spinner */
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #486Cff;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  animation: spin 2s linear infinite; /* Spinning animation */
+  animation: spin 2s linear infinite;
   margin: auto;
 }
 
-/* Animation for spinning */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
