@@ -16,7 +16,8 @@
 
 .det .word,
 .prt .word,
-.adp .word {
+.adp .word,
+.pron .word {
   text-decoration: none;
   border-bottom: none;
   cursor: default;
@@ -24,9 +25,9 @@
 
 .det:hover .word,
 .prt:hover .word,
-.adp:hover .word {
+.adp:hover .word,
+.pron:hover .word {
   font-weight: normal;
-  text-decoration: none;
 }
 
 /* Base word colors */
@@ -58,6 +59,14 @@
 .group:hover .periodic-element {
   visibility: visible;
   opacity: 1;
+}
+
+.det:hover .periodic-element,
+.prt:hover .periodic-element,
+.adp:hover .periodic-element,
+.pron:hover .periodic-element {
+  visibility: hidden;
+  opacity: 0;
 }
 
 /* Element arrow */
