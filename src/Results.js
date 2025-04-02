@@ -156,11 +156,12 @@ function Results() {
                     <span className="word">{item.text}</span>
                     
                     <a 
-                      href={item.definition_link || '#'}
+                      href={item.definition_link?.startsWith("http") ? item.definition_link : `https://en.wikipedia.org/wiki/${encodeURIComponent(item.text)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="periodic-element"
                     >
+
                       <div className="element-arrow"></div>
                       <div className="element-name">
                         {item.element_name === "TBD" ? item.definition : item.element_name}
