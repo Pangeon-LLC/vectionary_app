@@ -30,7 +30,7 @@ function Results() {
     setLoading(true);
     setError(null);
   
-    const url = "https://c71sd9neqf.execute-api.us-east-1.amazonaws.com/api/process";
+    const url = "https://pjhs2z55t3.execute-api.us-east-1.amazonaws.com/api/process";
     const requestData = { text: text, dummy: "0" };
   
     try {
