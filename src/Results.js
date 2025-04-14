@@ -93,6 +93,7 @@ function Results() {
                 border: '1px solid #ccc',
                 outline: 'none'
               }}
+              disabled={loading}
             />
             <button
               type="submit"

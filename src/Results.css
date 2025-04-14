@@ -18,7 +18,9 @@
 .prt .word,
 .adp .word,
 .pron .word,
-.conj .word {
+.conj .word,
+.punct .word,
+.x .word {
   text-decoration: none;
   border-bottom: none;
   cursor: default;
@@ -28,7 +30,9 @@
 .prt:hover .word,
 .adp:hover .word,
 .pron:hover .word,
-.conj:hover .word {
+.conj:hover .word,
+.punct:hover .word,
+.x:hover .word {
   font-weight: normal;
 }
 
@@ -67,7 +71,9 @@
 .prt:hover .periodic-element,
 .adp:hover .periodic-element,
 .pron:hover .periodic-element,
-.conj:hover .periodic-element {
+.conj:hover .periodic-element,
+.punct:hover .periodic-element,
+.x:hover .periodic-element {
   visibility: hidden;
   opacity: 0;
 }
