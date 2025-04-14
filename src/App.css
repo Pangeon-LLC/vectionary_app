@@ -40,6 +40,11 @@
   font-size: calc(2px + 2vmin);
   font-family: 'Helvetica', Arial, sans-serif; /* Consistent font */
   text-decoration: none;
+  font-weight: bold;
+}
+
+.api-info:hover {
+  text-decoration: underline;
 }
 
 .p7y-info {
@@ -50,10 +55,17 @@
   border-radius: 0;
   color: #ffffff;
   background-color: #555555;
+  border-radius: 5px;
   font-size: calc(6px + 2vmin);
   font-family: 'Roboto', sans-serif;
   font-weight: bold;
   text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.p7y-info:hover {
+  background-color: #00008b; /* Change background color on hover */
+  color: #ffffff; /* Optionally change text color on hover */
 }
 
 @keyframes App-logo-spin {
