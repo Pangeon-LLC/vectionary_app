@@ -109,6 +109,12 @@ function Results() {
                 opacity: loading ? 0.7 : 1
               }}
               disabled={loading}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#486cff'; // Change background color
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = '#00008b'; // Revert background color
+              }}
             >
               {loading ? 'Processing...' : 'Submit'}
             </button>

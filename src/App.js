@@ -57,7 +57,14 @@ function Home() {
                   border: 'none',
                   borderRadius: '0 4px 4px 0',
                   cursor: 'pointer',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  transition: 'background-color 0.3s'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#486cff'; // Change background color
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#00008b'; // Revert background color
                 }}
                 onClick={handleSubmit}
               >
