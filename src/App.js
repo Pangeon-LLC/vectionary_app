@@ -78,11 +78,11 @@ function Home() {
           </form>
 
           {/* Character Counter */}
-          <p style={{ fontSize: '14px', color: 'gray', textAlign: 'center', marginTop: '8px' }}>
+          <p style={{ fontSize: '14px', color: inputText.length === CHARACTER_LIMIT ? 'red' : 'gray', textAlign: 'center', marginTop: '8px' }}>
             {inputText.length} / {CHARACTER_LIMIT}
           </p>
-        </div>
 
+        </div>
         <a href="https://rapidapi.com/vectionary-sd11-vectionary-sd11-default/api/vectionary-api1/playground/apiendpoint_37ebbcd8-6050-4cd6-a5c8-261101ae2d1e" className="api-info" target="_blank" rel="noopener noreferrer">
           Looking for the API?
         </a>

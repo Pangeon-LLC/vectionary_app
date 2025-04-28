@@ -8,11 +8,14 @@ function Results() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [inputText, setInputText] = useState(location.state?.inputText || '');
+  const CHARACTER_LIMIT = 40;
   
   const handleInputChange = (e) => {
-    setInputText(e.target.value);
-    setError(null);
-  };
+    if (e.target.value.length <= CHARACTER_LIMIT) {
+      setInputText(e.target.value);
+      setError(null);
+    }
+  };  
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -119,8 +122,13 @@ function Results() {
               {loading ? 'Processing...' : 'Submit'}
             </button>
           </form>
+
+          {/* Character Counter */}
+          <p style={{ fontSize: '14px', color: inputText.length === CHARACTER_LIMIT ? 'red' : 'gray', textAlign: 'center', marginTop: '8px' }}>
+            {inputText.length} / {CHARACTER_LIMIT}
+          </p>
         </div>
-        
+
         <div style={{
           display: 'flex',
           flexDirection: 'column',
