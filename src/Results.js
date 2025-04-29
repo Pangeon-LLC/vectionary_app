@@ -8,7 +8,7 @@ function Results() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [inputText, setInputText] = useState(location.state?.inputText || '');
-  const CHARACTER_LIMIT = 40;
+  const CHARACTER_LIMIT = 500;
   
   const handleInputChange = (e) => {
     if (e.target.value.length <= CHARACTER_LIMIT) {
