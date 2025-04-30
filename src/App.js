@@ -6,7 +6,7 @@ import Results from './Results';
 function Home() {
   const navigate = useNavigate();
   const [inputText, setInputText] = useState('');
-  const CHARACTER_LIMIT = 500;
+  const CHARACTER_LIMIT = 40;
 
   const handleSubmit = () => {
     navigate('/results', { state: { inputText } });
