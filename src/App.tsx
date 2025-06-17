@@ -66,7 +66,7 @@ function Home() {
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-white p-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ 
                   background: '#486Cff',
-                  ':hover': { background: '#3a5ce6' }
+                  /* Use onMouseEnter and onMouseLeave for hover effects */
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.background = '#3a5ce6'}
                 onMouseLeave={(e) => e.currentTarget.style.background = '#486Cff'}
