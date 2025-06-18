@@ -57,8 +57,11 @@ function Results() {
       setResponseData(null);
       setRawApiData(null);
 
-      const url =
+      // for local testing, you can use a local server or mock the API
+      // const url =
         'https://cors-anywhere.herokuapp.com/https://us-central1-parsimony-server.cloudfunctions.net/process_text';
+      // For production, use the actual API endpoint
+      const url = "https://us-central1-parsimony-server.cloudfunctions.net/process_text";
       const requestData = { text };
 
       try {
@@ -98,7 +101,7 @@ function Results() {
     const sortedApiData = [...apiData].sort((a, b) => (a.char_index || 0) - (b.char_index || 0));
     
     const result: WordData[] = [];
-    let textIndex = 0;
+    // let textIndex = 0;
     let processedChars = 0;
 
     for (const apiItem of sortedApiData) {
