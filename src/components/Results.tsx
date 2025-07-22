@@ -2,19 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Search, ArrowLeft, Atom, Loader2, AlertCircle, ExternalLink } from 'lucide-react';
 
+// interface WordData {
+//   ID?: string;
+//   text: string;
+//   lemma: string;
+//   type: string;
+//   definition: {
+//     ID?: string;
+//     pos: string;
+//     definition: string;
+//   } | null;
+//   definition_link: string;
+//   char_index?: number;
+//   index?: number;
+// }
+
 interface WordData {
   ID?: string;
-  text: string;
-  lemma: string;
-  type: string;
-  definition: {
-    ID?: string;
-    pos: string;
-    definition: string;
-  } | null;
-  definition_link: string;
+  antonyms?: Array<string>;
+  synonyms?: Array<string>;
   char_index?: number;
+  dependency?: string;
+  definition?: string;
+  examples?: Array<string>;
   index?: number;
+  lemma: string;
+  parent?: number;
+  pos: string;
+  text: string;
+  tags?: Array<string>;
+  wikidata?: Array<string>;
 }
 
 function Results() {
@@ -59,9 +76,10 @@ function Results() {
 
       // for local testing, you can use a local server or mock the API
       // const url =
-        'https://cors-anywhere.herokuapp.com/https://us-central1-parsimony-server.cloudfunctions.net/process_text';
+      //  'https://cors-anywhere.herokuapp.com/https://us-central1-parsimony-server.cloudfunctions.net/process_text';
       // For production, use the actual API endpoint
-      const url = "https://us-central1-parsimony-server.cloudfunctions.net/process_text";
+      //const url = "https://us-central1-parsimony-server.cloudfunctions.net/process_text";
+      const url = "https://us-central1-parsimony-server.cloudfunctions.net/process_text_prod";
       const requestData = { text };
 
       try {
@@ -122,12 +140,8 @@ function Results() {
             result.push({
               text: word,
               lemma: word,
-              type: 'UNKNOWN',
-              definition: {
-                pos: 'UNKNOWN',
-                definition: 'No definition available.'
-              },
-              definition_link: `https://en.wiktionary.org/wiki/${encodeURIComponent(word)}`
+              pos: 'UNKNOWN',
+              definition: 'No definiton available',
             });
             processedChars = wordStart + word.length;
           } else {
@@ -151,12 +165,8 @@ function Results() {
       result.push({
         text: word,
         lemma: word,
-        type: 'UNKNOWN',
-        definition: {
-          pos: 'UNKNOWN',
-          definition: 'No definition available.'
-        },
-        definition_link: `https://en.wiktionary.org/wiki/${encodeURIComponent(word)}`
+        pos: 'UNKNOWN',
+        definition: 'No definition available.',
       });
     }
 
@@ -299,18 +309,18 @@ function Results() {
                 <div className="text-center">
                   <div className="text-2xl leading-relaxed">
                     {responseData.map((item, index) => {
-                      const colors = getElementColors(item.type);
-                      const wordColors = getWordTypeColor(item.type);
-                      const def = item.definition?.definition || 'No definition available.';
-                      const defLink = item.definition_link || `https://en.wikipedia.org/wiki/${encodeURIComponent(item.text)}`;
+                      const colors = getElementColors(item.pos);
+                      const wordColors = getWordTypeColor(item.pos);
+                      const def = item.definition || 'No definition available.';
+                      //const defLink = item.definition_link || `https://en.wikipedia.org/wiki/${encodeURIComponent(item.text)}`;
                       
                       // For proper nouns, use the ID; for others, use definition ID or fallback
-                      const displayId = item.type.toLowerCase().includes('proper') 
-                        ? item.ID || `${item.text}_${item.type}`
-                        : item.definition?.ID || `${item.text}_${item.type}_1.1`;
+                      const displayId = item.pos.toLowerCase().includes('proper') 
+                        ? item.ID || `${item.text}_${item.pos}`
+                        : item.ID || `${item.text}_${item.pos}_1.1`;
 
                       // Skip styling for certain word types
-                      const skipStyling = ['det', 'prt', 'adp', 'pron', 'conj', 'punct', 'x', 'num', 'unknown'].includes(item.type.toLowerCase());
+                      const skipStyling = ['det', 'prt', 'adp', 'pron', 'conj', 'punct', 'x', 'num', 'unknown'].includes(item.pos.toLowerCase());
 
                       if (skipStyling) {
                         return (
@@ -328,7 +338,7 @@ function Results() {
 
                           {/* Periodic Element Tooltip */}
                           <a
-                            href={defLink}
+                            //href={defLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute left-1/2 bottom-full transform -translate-x-1/2 mb-3 w-80 transition-all duration-300 z-50 hover:scale-105"
